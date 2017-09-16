@@ -2,14 +2,25 @@ var http = require('http')
 var bl = require('bl')
 var webURL = process.argv[2]
 
-http.get(webURL, function(response) {
-  response.setEncoding('utf8');
-  response.pipe(bl(function (err, data){
-    console.log(data.toString().length);
-    console.log(data.toString());
-  }));
-});
+function getWebInfo(callback) {
+  for (i = 2; i < process.argv.length; i++) {
+    http.get(process.argv[i], function(response) {
+      response.setEncoding('utf8');
+      response.pipe(bl(function (err, data){
 
+        callback(null, data.toString());
+      }));
+    });  
+  };
+};
+
+function logMyInfo(err, data) {
+  if (err)
+    {console.error(err)}
+  console.log(data)
+}
+
+getWebInfo(logMyInfo)
 
 
 
