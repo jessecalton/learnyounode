@@ -1,11 +1,13 @@
 var http = require('http')
+var bl = require('bl')
 var webURL = process.argv[2]
 
 http.get(webURL, function(response) {
   response.setEncoding('utf8');
-  response.on("data", function(data){
-    console.log(data);
-  })
+  response.pipe(bl(function (err, data){
+    console.log(data.toString().length);
+    console.log(data.toString());
+  }));
 });
 
 
